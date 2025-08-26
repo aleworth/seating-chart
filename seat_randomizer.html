@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seating Chart Randomizer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #FFFFFF;
+            background: linear-gradient(135deg,rgba(255, 255, 255, 1) 0%, rgba(224, 224, 224, 1) 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #0A2342;
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .input-section {
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: #333;
+            font-size: 1.1em;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .help-text {
+            margin-top: 8px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .button-container {
+            display: flex;
+            flex-flow: row;
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .button {
+            width: 200px;
+            height: 30px;
+            padding: 10px 37px;
+            border-radius: 10px;
+            color: white;
+            border: none;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            cursor: pointer;
+        }
+
+        .randomize-btn {
+            background: #5FA8D3;
+            width: 300px;
+            height: 50px;
+            padding: 10px 37px;
+            margin: 5px;
+            border-radius: 10px;
+            color: white;
+            border: none;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(95, 168, 211, 0.3);
+            cursor: pointer;
+        }
+
+        .randomize-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(95, 168, 211, 0.4);
+        }
+
+        .randomize-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .results {
+            margin-top: 30px;
+        }
+
+        .results h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            text-align: center;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .result-item {
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            padding: 15px 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #667eea;
+            transition: transform 0.2s ease;
+        }
+
+        .result-item:hover {
+            transform: translateX(5px);
+        }
+
+        .name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .number {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+            background: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.2);
+        }
+
+        .clear-btn {
+            background: #FF6B6B;
+            width: 300px;
+            height: 50px;
+            padding: 10px 37px;
+            margin: 5px;
+            border-radius: 10px;
+            color: white;
+            border: none;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(196, 77, 77, 0.3);
+            cursor: pointer;
+        }
+
+        .clear-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(196, 77, 77, 0.4);
+        }
+
+        .stats {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            color: #666;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Seating Chart Randomizer</h1>
+            <p>This is for the best...</p>
+        </div>
+        
+        <div class="content">
+            <div class="input-section">
+                <label for="nameInput">Enter Names:</label>
+                <textarea 
+                    id="nameInput" 
+                    placeholder="Enter names, one per line:&#10;&#10;Alice&#10;Bob&#10;Charlie&#10;Diana&#10;Eve"
+                ></textarea>
+                <div class="help-text">
+                </div>
+            </div>
+            
+            <div class="button-container">
+                <button class="randomize-btn" onclick="randomizeNames()">
+                Randomize Seating
+                </button>
+                <button class="clear-btn" onclick="clearAll()">
+                Clear All
+                </button>
+            </div>
+            
+            <div id="results" class="results" style="display: none;">
+                <h2>🎉 Results</h2>
+                <div id="resultsGrid" class="results-grid"></div>
+                <div id="stats" class="stats"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function randomizeNames() {
+            const input = document.getElementById('nameInput').value;
+            const resultsDiv = document.getElementById('results');
+            const resultsGrid = document.getElementById('resultsGrid');
+            const statsDiv = document.getElementById('stats');
+            
+            // Parse names from input
+            const names = input
+                .split('\n')
+                .map(name => name.trim())
+                .filter(name => name.length > 0);
+            
+            if (names.length === 0) {
+                alert('Please enter at least one name!');
+                return;
+            }
+            
+            // Check for duplicate names
+            const uniqueNames = [...new Set(names)];
+            if (uniqueNames.length !== names.length) {
+                const duplicateCount = names.length - uniqueNames.length;
+                if (!confirm(`Found ${duplicateCount} duplicate name(s). Continue with unique names only?`)) {
+                    return;
+                }
+            }
+            
+            // Create array of numbers 1 to n and shuffle them
+            const numbers = Array.from({length: uniqueNames.length}, (_, i) => i + 1);
+            const shuffledNumbers = shuffleArray(numbers);
+            
+            // Pair names with random numbers
+            const results = uniqueNames.map((name, index) => ({
+                name: name,
+                number: shuffledNumbers[index]
+            }));
+            
+            // Sort by number for display
+            results.sort((a, b) => a.number - b.number);
+            
+            // Display results
+            resultsGrid.innerHTML = '';
+            results.forEach(result => {
+                const item = document.createElement('div');
+                item.className = 'result-item';
+                item.innerHTML = `
+                    <span class="name">${result.name}</span>
+                    <span class="number">#${result.number}</span>
+                `;
+                resultsGrid.appendChild(item);
+            });
+            
+            // Show stats
+            statsDiv.innerHTML = `
+                📊 Assigned ${uniqueNames.length} unique numbers to ${uniqueNames.length} names
+                ${uniqueNames.length !== names.length ? `(${names.length - uniqueNames.length} duplicates removed)` : ''}
+            `;
+            
+            resultsDiv.style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function clearAll() {
+            document.getElementById('nameInput').value = '';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('nameInput').focus();
+        }
+        
+        // Allow Enter key in textarea but Ctrl+Enter to randomize
+        document.getElementById('nameInput').addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                randomizeNames();
+            }
+        });
+        
+        // Focus on input when page loads
+        window.addEventListener('load', function() {
+            document.getElementById('nameInput').focus();
+        });
+    </script>
+</body>
+</html>
